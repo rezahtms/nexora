@@ -34,18 +34,38 @@ export async function sendRequest<
     successMessage: options.successMessage,
   };
 
-  try {
-    const response = await methodExecutors[options.method]<TResponse, TBody, TParams>(
-      options.url,
-      config,
-      options.body,
-    );
-    return response.data;
-  } catch (error: unknown) {
-    if (isCanceledError(error) || error instanceof ApiError) {
-      throw error;
+  const maxAttempts = isMutation ? 1 : 2;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await methodExecutors[options.method]<TResponse, TBody, TParams>(
+        options.url,
+        config,
+        options.body,
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (isCanceledError(error)) {
+        throw error;
+      }
+
+      const apiError =
+        error instanceof ApiError
+          ? error
+          : new ApiError(
+              error instanceof Error && error.message ? error.message : "Something went wrong.",
+              0,
+              null,
+            );
+
+      const shouldRetry = !isMutation && apiError.statusCode === 0 && attempt < maxAttempts;
+      if (shouldRetry) {
+        continue;
+      }
+
+      throw apiError;
     }
-    const message = error instanceof Error && error.message ? error.message : "Something went wrong.";
-    throw new ApiError(message, 0, null);
   }
+
+  throw new ApiError("Something went wrong.", 0, null);
 }
