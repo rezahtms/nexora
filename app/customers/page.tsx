@@ -6,6 +6,8 @@ import { getQueryClient } from "@/lib/providers/getQueryClient";
 import { customersQueryOptions } from "@/lib/services/customer/customer.options";
 import { parseCustomerListParams } from "@/lib/utils/parseCustomerListParams";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Customers",
