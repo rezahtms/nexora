@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Providers from "@/lib/providers/providers";
-import ToastProvider from "@/components/shared/toast-provider";
+import ToastProvider from "@/components/shared/ToastProvider";
 import "./globals.css";
 
 const geist = localFont({ src: "../public/fonts/geist-latin.woff2", variable: "--font-geist-sans", weight: "100 900", display: "swap" });

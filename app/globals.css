@@ -49,12 +49,6 @@ button, a { touch-action: manipulation; }
 :focus-visible { outline: 3px solid color-mix(in oklch, var(--ring), transparent 20%); outline-offset: 2px; }
 .skip-link { position: absolute; z-index: 100; top: 1rem; left: 1rem; transform: translateY(-160%); border-radius: .5rem; background: var(--foreground); color: white; padding: .75rem 1rem; font-weight: 600; }
 .skip-link:focus { transform: translateY(0); }
-.loader-ring { width: 1.35rem; height: 1.35rem; border: 2px solid color-mix(in oklch, var(--primary), transparent 78%); border-top-color: var(--primary); border-radius: 50%; animation: spin .75s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.skeleton-block { display: block; background: linear-gradient(90deg, oklch(0.93 0.01 255), oklch(0.97 0.008 255), oklch(0.93 0.01 255)); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; }
-@keyframes shimmer { to { background-position: -200% 0; } }
-.dialog-backdrop { position: fixed; inset: 0; z-index: 50; background: rgb(15 23 42 / 48%); backdrop-filter: blur(3px); }
-.dialog-popup { position: fixed; z-index: 51; top: 50%; left: 50%; width: calc(100% - 2rem); transform: translate(-50%, -50%); border: 1px solid var(--border); border-radius: 1rem; background: var(--card); padding: 1.5rem; box-shadow: 0 24px 80px rgb(15 23 42 / 22%); }
 .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1rem; }
 @media (max-width: 420px) { .detail-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

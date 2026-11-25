@@ -1,14 +1,14 @@
 import { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { axiosInstance } from "@/lib/configs/axios-instance";
+import { axiosInstance } from "@/lib/configs/axiosInstance";
 import { sendRequest } from "@/lib/configs/request";
-import { ApiError } from "@/lib/utils/api-error";
+import { ApiError } from "@/lib/utils/apiError";
 import {
   extractResponseMessage,
   getDefaultErrorMessage,
   getDefaultSuccessMessage,
-} from "@/lib/utils/toast-messages";
+} from "@/lib/utils/toastMessages";
 
 vi.mock("react-hot-toast", () => ({
   default: {

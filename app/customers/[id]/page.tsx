@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import CustomerProfile from "@/components/pages/customers/customer-profile";
-import { getQueryClient } from "@/lib/providers/get-query-client";
-import { getServerCustomer } from "@/lib/utils/get-server-customer";
-import { parseCustomerId } from "@/lib/utils/parse-customer-id";
-import { requireServerCustomer } from "@/lib/utils/require-server-customer";
+import CustomerProfile from "@/components/pages/customers/CustomerProfile";
+import { getQueryClient } from "@/lib/providers/getQueryClient";
+import { getServerCustomer } from "@/lib/utils/getServerCustomer";
+import { parseCustomerId } from "@/lib/utils/parseCustomerId";
 
 export async function generateMetadata({ params }: PageProps<"/customers/[id]">): Promise<Metadata> {
   const { id } = await params;
   const customerId = parseCustomerId(id);
   if (customerId === null) {
-    return { title: "Customer not found", robots: { index: false } };
+    return { title: "Customer not found", robots: { index: false, follow: false } };
   }
   const customer = await getServerCustomer(customerId);
   if (!customer) {
-    return { title: "Customer not found", robots: { index: false } };
+    return { title: "Customer not found", robots: { index: false, follow: false } };
   }
   const fullName = `${customer.firstName} ${customer.lastName}`;
   return {
@@ -30,7 +30,11 @@ export async function generateMetadata({ params }: PageProps<"/customers/[id]">)
 
 export default async function CustomerPage({ params }: PageProps<"/customers/[id]">) {
   const { id } = await params;
-  await requireServerCustomer(id);
+  const customerId = parseCustomerId(id);
+  if (customerId === null) {
+    notFound();
+  }
+  await getServerCustomer(customerId);
   const queryClient = getQueryClient();
 
   return (

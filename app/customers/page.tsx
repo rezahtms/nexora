@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import AddCustomerButton from "@/components/pages/customers/add-customer-button";
-import CustomerList from "@/components/pages/customers/customer-list";
-import { getQueryClient } from "@/lib/providers/get-query-client";
+import AddCustomerButton from "@/components/pages/customers/AddCustomerButton";
+import CustomerList from "@/components/pages/customers/CustomerList";
+import { getQueryClient } from "@/lib/providers/getQueryClient";
 import { customersQueryOptions } from "@/lib/services/customer/customer.options";
-import { parseCustomerListParams } from "@/lib/utils/parse-customer-list-params";
+import { parseCustomerListParams } from "@/lib/utils/parseCustomerListParams";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

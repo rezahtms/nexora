@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import { axiosInstance } from "@/lib/configs/axios-instance";
+import { axiosInstance } from "@/lib/configs/axiosInstance";
 import type { HttpMethod, RequestOptions } from "@/lib/types/api.types";
-import { ApiError } from "@/lib/utils/api-error";
-import { isCanceledError } from "@/lib/utils/is-canceled-error";
+import { ApiError } from "@/lib/utils/apiError";
+import { isCanceledError } from "@/lib/utils/isCanceledError";
 
 type MethodExecutor = <TResponse, TBody, TParams>(
   url: string,
