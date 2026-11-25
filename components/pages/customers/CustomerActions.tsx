@@ -1,15 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/constants/routes";
 import useQueryParams, { buildQueryString } from "@/lib/hooks/useQueryParams";
 import type { Customer } from "@/lib/types/customer.types";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const DeleteCustomerModal = dynamic(
-  () => import("@/components/pages/customers/modals/DeleteCustomerModal"),
+  () => import("@/components/pages/customers/DeleteCustomerModal"),
 );
 
 type CustomerListQuery = {
