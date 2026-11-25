@@ -1,0 +1,240 @@
+openapi: 3.0.3
+info:
+  title: DummyJSON Users API
+  version: 1.0.0
+  description: Customer records provided by DummyJSON.
+servers:
+  - url: https://dummyjson.com
+paths:
+  /users:
+    get:
+      tags: [Users]
+      operationId: getUsers
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Skip'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/Order'
+      responses:
+        '200':
+          description: A page of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+  /users/search:
+    get:
+      tags: [Users]
+      operationId: searchUsers
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Skip'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/Order'
+      responses:
+        '200':
+          description: Matching users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+  /users/{id}:
+    get:
+      tags: [Users]
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: A user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      tags: [Users]
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags: [Users]
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Deleted user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+  /users/add:
+    post:
+      tags: [Users]
+      operationId: addUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 30
+    Skip:
+      name: skip
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    SortBy:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+    Order:
+      name: order
+      in: query
+      schema:
+        type: string
+        enum: [asc, desc]
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    UserList:
+      type: object
+      required: [users, total, skip, limit]
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        total:
+          type: integer
+        skip:
+          type: integer
+        limit:
+          type: integer
+    UserInput:
+      type: object
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        maidenName: { type: string }
+        age: { type: integer }
+        gender: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        username: { type: string }
+        password: { type: string }
+        birthDate: { type: string }
+        image: { type: string, format: uri }
+        bloodGroup: { type: string }
+        height: { type: number }
+        weight: { type: number }
+        eyeColor: { type: string }
+        hair: { $ref: '#/components/schemas/Hair' }
+        address: { $ref: '#/components/schemas/Address' }
+        macAddress: { type: string }
+        university: { type: string }
+        ip: { type: string }
+        bank: { $ref: '#/components/schemas/Bank' }
+        company: { $ref: '#/components/schemas/Company' }
+        ein: { type: string }
+        ssn: { type: string }
+        userAgent: { type: string }
+        crypto: { $ref: '#/components/schemas/Crypto' }
+        role: { type: string }
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserInput'
+        - type: object
+          required: [id, firstName, lastName, email, phone, image, address, company]
+          properties:
+            id: { type: integer }
+    Address:
+      type: object
+      properties:
+        address: { type: string }
+        city: { type: string }
+        state: { type: string }
+        stateCode: { type: string }
+        postalCode: { type: string }
+        coordinates:
+          type: object
+          properties:
+            lat: { type: number }
+            lng: { type: number }
+        country: { type: string }
+    Company:
+      type: object
+      properties:
+        department: { type: string }
+        name: { type: string }
+        title: { type: string }
+        address: { $ref: '#/components/schemas/Address' }
+    Bank:
+      type: object
+      properties:
+        cardExpire: { type: string }
+        cardNumber: { type: string }
+        cardType: { type: string }
+        currency: { type: string }
+        iban: { type: string }
+    Hair:
+      type: object
+      properties:
+        color: { type: string }
+        type: { type: string }
+    Crypto:
+      type: object
+      properties:
+        coin: { type: string }
+        wallet: { type: string }
+        network: { type: string }
+    DeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required: [isDeleted, deletedOn]
+          properties:
+            isDeleted: { type: boolean }
+            deletedOn: { type: string, format: date-time }
