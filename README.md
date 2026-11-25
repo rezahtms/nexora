@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nexora CRM
 
-## Getting Started
+A responsive customer workspace built with Next.js 16, React 19, TypeScript, Tailwind CSS 4, TanStack Query, and DummyJSON.
 
-First, run the development server:
+## Run locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install dependencies with `pnpm install`.
+2. Copy `.env.example` to `.env.local`. The default API URL is `https://dummyjson.com`.
+3. Generate the typed API client with `pnpm generate:api`.
+4. Start the app with `pnpm dev` and open `http://localhost:3000/customers`.
+5. Verify the project with `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technical decisions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- The customer directory is fetched and rendered on the server for its first response, then hydrated into the browser's TanStack Query cache.
+- Search, sort, and pagination are derived from the URL. Search is debounced, query keys include the complete filter state, and Next.js's integrated native history API updates filters without an extra server navigation.
+- The OpenAPI contract is the source for the Orval client; a shared axios mutator passes cancellation signals and normalizes API errors.
+- Customer edits and deletes update cached lists optimistically. Failed writes restore snapshots, while session changes are retained in the query cache and browser session storage because DummyJSON does not persist writes.
+- A cancelled query signal is passed through axios, and React Query isolates each search result by its stable key to prevent stale responses from taking over the latest view.
+- The mobile directory uses stacked customer cards, while wider screens use a semantic table. Detail sections group personal, contact, address, company, and supplemental data.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Limitations
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- DummyJSON is a demonstration API: create, edit, and delete requests are simulated and do not alter its server data. Local changes last only for the current browser session and reset when that session storage is cleared.
+- DummyJSON's search endpoint and sort semantics are limited to its own behavior; local session changes are merged into the current result page rather than being backed by a persistent server-side index.
+- The shadcn component registry could not be reached from this environment. The small Base UI primitives used here are locally styled with the existing shadcn tokens instead.
+- Lighthouse was not run in this environment, and the dev server could not verify live DummyJSON requests. Run those checks against a network-enabled deployment before release.

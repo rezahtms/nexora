@@ -1,12 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  experimental: {
-    agentFeedback: true,
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "dummyjson.com" },
+      { protocol: "https", hostname: "images.dummyjson.com" },
+      { protocol: "https", hostname: "robohash.org" },
+    ],
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {
