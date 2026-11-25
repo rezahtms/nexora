@@ -1,56 +1,92 @@
 "use client";
 
-import { useCallback } from "react";
 import type { QueryKey } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
-import { useUpdateUser } from "@/lib/api/generated/users/users";
-import { queryKeys } from "@/lib/constants/query-keys";
-import type { Customer, CustomerInput, CustomerPage, SessionChanges } from "@/lib/types/customer.types";
-import { applyCustomerUpdate } from "@/lib/utils/customer-session";
-import { saveSessionChanges } from "@/lib/utils/session-storage";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { EMPTY_CUSTOMER_CACHE_CHANGES } from "@/lib/constants/config";
+import { updateCustomer } from "@/lib/services/customer/customer-update.controller";
+import { customerKeys } from "@/lib/services/customer/customer.keys";
+import type {
+  Customer,
+  CustomerCacheChanges,
+  CustomerPage,
+  CustomerUpdateRequest,
+} from "@/lib/types/customer.types";
+import { applyCustomerUpdate } from "@/lib/utils/customer-cache";
 
-type Snapshot = { session: SessionChanges; lists: [QueryKey, CustomerPage | undefined][]; details: [QueryKey, Customer | undefined][] };
+type UpdateSnapshot = {
+  changes: CustomerCacheChanges;
+  lists: [QueryKey, CustomerPage | undefined][];
+  details: [QueryKey, Customer | undefined][];
+};
 
 export default function useUpdateCustomer() {
   const queryClient = useQueryClient();
-  const mutation = useUpdateUser({
-    mutation: {
-      scope: { id: "customer-writes" },
-      onMutate: async ({ id, data }): Promise<Snapshot> => {
-        await queryClient.cancelQueries({ queryKey: queryKeys.customers.all });
-        const snapshot: Snapshot = {
-          session: queryClient.getQueryData<SessionChanges>(queryKeys.customers.session()) ?? { created: [], updated: {}, deleted: [] },
-          lists: queryClient.getQueriesData<CustomerPage>({ queryKey: queryKeys.customers.lists() }),
-          details: queryClient.getQueriesData<Customer>({ queryKey: ["customers", "detail"] }),
-        };
-        const existing = queryClient.getQueryData<Customer>(queryKeys.customers.detail(id)) ?? snapshot.lists.flatMap(([, page]) => page?.users ?? []).find((item) => item.id === id);
-        if (!existing) return snapshot;
-        const updated: Customer = { ...existing, ...data, company: { ...existing.company, ...data.company, address: { ...existing.company.address, ...data.company?.address } }, address: { ...existing.address, ...data.address } };
-        saveSessionChanges(queryClient, { ...snapshot.session, updated: { ...snapshot.session.updated, [id]: updated } });
-        queryClient.setQueriesData<CustomerPage>({ queryKey: queryKeys.customers.lists() }, (page) => page ? applyCustomerUpdate(page, updated) : page);
-        queryClient.setQueryData(queryKeys.customers.detail(id), updated);
-        return snapshot;
-      },
-      onError: (_error, _variables, snapshot) => {
-        if (!snapshot) return;
-        saveSessionChanges(queryClient, snapshot.session);
-        snapshot.lists.forEach(([key, value]) => queryClient.setQueryData(key, value));
-        snapshot.details.forEach(([key, value]) => queryClient.setQueryData(key, value));
-      },
-      onSuccess: (response) => {
-        const changes = queryClient.getQueryData<SessionChanges>(queryKeys.customers.session()) ?? { created: [], updated: {}, deleted: [] };
-        const updated = { ...response, ...changes.updated[response.id] };
-        saveSessionChanges(queryClient, { ...changes, updated: { ...changes.updated, [response.id]: updated } });
-        queryClient.setQueriesData<CustomerPage>({ queryKey: queryKeys.customers.lists() }, (page) => page ? applyCustomerUpdate(page, updated) : page);
-        queryClient.setQueryData(queryKeys.customers.detail(response.id), updated);
-      },
-      onSettled: async (_data, _error, variables) => {
-        await queryClient.invalidateQueries({ queryKey: queryKeys.customers.lists() });
-        await queryClient.invalidateQueries({ queryKey: queryKeys.customers.detail(variables.id) });
-      },
+
+  return useMutation({
+    scope: { id: "customer-writes" },
+    mutationFn: (request: CustomerUpdateRequest) => updateCustomer(request),
+    onMutate: async ({ id, input }): Promise<UpdateSnapshot> => {
+      await queryClient.cancelQueries({ queryKey: customerKeys.all() });
+      const snapshot: UpdateSnapshot = {
+        changes:
+          queryClient.getQueryData<CustomerCacheChanges>(customerKeys.cacheChanges()) ??
+          EMPTY_CUSTOMER_CACHE_CHANGES,
+        lists: queryClient.getQueriesData<CustomerPage>({ queryKey: customerKeys.lists() }),
+        details: queryClient.getQueriesData<Customer>({ queryKey: customerKeys.details() }),
+      };
+
+      const existing =
+        queryClient.getQueryData<Customer>(customerKeys.detail(id)) ??
+        snapshot.lists
+          .flatMap(([, page]) => page?.users ?? [])
+          .find((item) => item.id === id) ??
+        snapshot.changes.created.find((item) => item.id === id);
+
+      if (!existing) return snapshot;
+
+      const updated: Customer = {
+        ...existing,
+        ...input,
+        company: {
+          ...existing.company,
+          ...input.company,
+          address: { ...existing.company.address, ...input.company?.address },
+        },
+        address: { ...existing.address, ...input.address },
+      };
+
+      queryClient.setQueryData<CustomerCacheChanges>(customerKeys.cacheChanges(), {
+        ...snapshot.changes,
+        updated: { ...snapshot.changes.updated, [id]: updated },
+      });
+      queryClient.setQueriesData<CustomerPage>({ queryKey: customerKeys.lists() }, (page) =>
+        page ? applyCustomerUpdate(page, updated) : page,
+      );
+      queryClient.setQueryData(customerKeys.detail(id), updated);
+
+      return snapshot;
+    },
+    onError: (_error, _variables, snapshot) => {
+      if (!snapshot) return;
+      queryClient.setQueryData(customerKeys.cacheChanges(), snapshot.changes);
+      snapshot.lists.forEach(([key, value]) => queryClient.setQueryData(key, value));
+      snapshot.details.forEach(([key, value]) => queryClient.setQueryData(key, value));
+    },
+    onSuccess: (response, variables) => {
+      const current =
+        queryClient.getQueryData<CustomerCacheChanges>(customerKeys.cacheChanges()) ??
+        EMPTY_CUSTOMER_CACHE_CHANGES;
+      const optimistic = current.updated[variables.id];
+      const merged: Customer = optimistic ? { ...response, ...optimistic } : response;
+
+      queryClient.setQueryData<CustomerCacheChanges>(customerKeys.cacheChanges(), {
+        ...current,
+        updated: { ...current.updated, [variables.id]: merged },
+      });
+      queryClient.setQueriesData<CustomerPage>({ queryKey: customerKeys.lists() }, (page) =>
+        page ? applyCustomerUpdate(page, merged) : page,
+      );
+      queryClient.setQueryData(customerKeys.detail(variables.id), merged);
     },
   });
-  const generatedMutateAsync = mutation.mutateAsync;
-  const mutateAsync = useCallback(({ id, input }: { id: number; input: CustomerInput }) => generatedMutateAsync({ id, data: input }), [generatedMutateAsync]);
-  return { ...mutation, mutateAsync };
 }
