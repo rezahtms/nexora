@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseFieldValue } from "@/components/shared/form/parseFieldValue";
+import { parseFieldValue } from "@/lib/utils/parseFieldValue";
 
 describe("parseFieldValue", () => {
   it("returns string values for string fields", () => {

@@ -5,13 +5,9 @@ import Link from "next/link";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/constants/routes";
-import useQueryParams from "@/lib/hooks/useQueryParams";
-import { buildQueryString } from "@/lib/hooks/useQueryParams";
+import useQueryParams, { buildQueryString } from "@/lib/hooks/useQueryParams";
 import type { Customer } from "@/lib/types/customer.types";
 
-const CustomerFormModal = dynamic(
-  () => import("@/components/pages/customers/modals/CustomerFormModal"),
-);
 const DeleteCustomerModal = dynamic(
   () => import("@/components/pages/customers/modals/DeleteCustomerModal"),
 );
@@ -48,19 +44,16 @@ export default function CustomerActions({ customer }: CustomerActionsProps) {
         <Eye aria-hidden="true" />
       </Button>
 
-      <CustomerFormModal
-        customer={customer}
-        trigger={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="min-h-11 min-w-11"
-            aria-label={`Edit ${fullName}`}
-          >
-            <Pencil aria-hidden="true" />
-          </Button>
-        }
-      />
+      <Button
+        variant="ghost"
+        size="icon"
+        className="min-h-11 min-w-11"
+        aria-label={`Edit ${fullName}`}
+        nativeButton={false}
+        render={<Link href={routes.editCustomer(customer.id)} />}
+      >
+        <Pencil aria-hidden="true" />
+      </Button>
 
       <DeleteCustomerModal
         customer={customer}
