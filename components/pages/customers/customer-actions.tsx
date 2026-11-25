@@ -37,7 +37,7 @@ export default function CustomerActions({ customer }: { customer: Customer }) {
   return (
     <>
       <div className="flex items-center justify-end gap-1">
-        <Button className="min-h-11 min-w-11" variant="ghost" size="icon" aria-label={`View ${customer.firstName} ${customer.lastName}`} render={<Link href={`${routes.customer(customer.id)}${searchParams.size ? `?${searchParams.toString()}` : ""}`} />}><Eye aria-hidden="true" /></Button>
+        <Button className="min-h-11 min-w-11" variant="ghost" size="icon" aria-label={`View ${customer.firstName} ${customer.lastName}`} nativeButton={false} render={<Link href={`${routes.customer(customer.id)}${searchParams.size ? `?${searchParams.toString()}` : ""}`} />}><Eye aria-hidden="true" /></Button>
         <Button className="min-h-11 min-w-11" variant="ghost" size="icon" aria-label={`Edit ${customer.firstName} ${customer.lastName}`} onClick={() => setEditing(true)}><Pencil aria-hidden="true" /></Button>
         <Button className="min-h-11 min-w-11 text-destructive hover:text-destructive" variant="ghost" size="icon" aria-label={`Delete ${customer.firstName} ${customer.lastName}`} onClick={() => setConfirmingDelete(true)}><Trash2 aria-hidden="true" /></Button>
       </div>
