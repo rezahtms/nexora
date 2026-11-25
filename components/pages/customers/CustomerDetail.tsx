@@ -1,15 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AlertCircle, Building2, Mail, MapPin, Phone, RefreshCw, UserRoundX } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import useBackToCustomersHref from "@/lib/hooks/useBackToCustomersHref";
-import useCustomer from "@/lib/hooks/useCustomer";
+import { routes } from "@/lib/constants/routes";
+import useCustomer from "@/lib/services/customer/customerDetail.controller";
 import useCustomerId from "@/lib/hooks/useCustomerId";
 
 function maskIdentifier(value?: string): string | undefined {
@@ -33,10 +33,8 @@ function DetailItem({ label, value, icon }: { label: string; value?: string | nu
 
 export default function CustomerDetail() {
   const id = useCustomerId();
-  const backHref = useBackToCustomersHref();
   const customerQuery = useCustomer(id);
   const customer = customerQuery.data;
-  const router = useRouter();
 
   if (customerQuery.isNotFound) {
     return (
@@ -51,7 +49,7 @@ export default function CustomerDetail() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button variant="outline" onClick={() => router.push(backHref)}>
+          <Button variant="outline" nativeButton={false} render={<Link href={routes.customers} />}>
             Back to customers
           </Button>
         </EmptyContent>

@@ -1,17 +1,8 @@
 "use client";
 
 import { useCallback, useState, type ReactElement } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import Modal from "@/components/shared/Modal";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 type ConfirmModalProps = {
@@ -41,38 +32,45 @@ export default function ConfirmModal({
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
+      if (isPending) {
+        return;
+      }
       if (!isControlled) {
         setInternalOpen(nextOpen);
       }
       onOpenChange?.(nextOpen);
     },
-    [isControlled, onOpenChange],
+    [isControlled, isPending, onOpenChange],
   );
 
   return (
-    <AlertDialog open={currentOpen} onOpenChange={handleOpenChange}>
-      <AlertDialogTrigger render={trigger} />
-      <AlertDialogContent size="sm">
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+    <Modal
+      trigger={trigger}
+      title={title}
+      description={description}
+      open={currentOpen}
+      onOpenChange={handleOpenChange}
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isPending}>
+            Cancel
+          </Button>
+          <Button
+            type="button"
             variant="destructive"
             disabled={isPending}
-            onClick={(event) => {
-              event.preventDefault();
-              onConfirm();
-            }}
+            onClick={() => onConfirm()}
           >
             {isPending ? <Spinner data-icon="inline-start" /> : null}
             {confirmLabel}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </>
+      }
+    >
+      <p className="text-sm text-muted-foreground">
+        This action cannot be undone for this session.
+      </p>
+    </Modal>
   );
 }
 

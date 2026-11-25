@@ -4,8 +4,7 @@ import { useCallback, useState, type ReactElement } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import ConfirmModal from "@/components/shared/ConfirmModal";
 import { routes } from "@/lib/constants/routes";
-import useBackToCustomersHref from "@/lib/hooks/useBackToCustomersHref";
-import useDeleteCustomer from "@/lib/hooks/useDeleteCustomer";
+import useDeleteCustomer from "@/lib/services/customer/customerDelete.controller";
 import type { Customer } from "@/lib/types/customer.types";
 
 type DeleteCustomerModalProps = {
@@ -18,15 +17,14 @@ export default function DeleteCustomerModal({ trigger, customer }: DeleteCustome
   const deleteCustomer = useDeleteCustomer();
   const router = useRouter();
   const pathname = usePathname();
-  const backHref = useBackToCustomersHref();
 
   const handleConfirm = useCallback(async () => {
     await deleteCustomer.mutateAsync(customer.id);
     setOpen(false);
     if (pathname !== routes.customers) {
-      router.replace(backHref);
+      router.replace(routes.customers);
     }
-  }, [backHref, customer.id, deleteCustomer, pathname, router]);
+  }, [customer.id, deleteCustomer, pathname, router]);
 
   return (
     <ConfirmModal

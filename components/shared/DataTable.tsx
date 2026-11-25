@@ -255,15 +255,18 @@ export default function DataTable<TData>({
   const paginationItems = useMemo(() => getPaginationItems(safePage, pageCount), [pageCount, safePage]);
 
   const setPage = useCallback(
-    (page: number) => {
+    (page: number, scroll = true) => {
       setQueryParams({ page: String(page) });
+      if (scroll && typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     },
     [setQueryParams],
   );
 
   useEffect(() => {
     if (!isLoading && data && currentPage > pageCount) {
-      setPage(pageCount);
+      setPage(pageCount, false);
     }
   }, [currentPage, data, isLoading, pageCount, setPage]);
 

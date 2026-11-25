@@ -10,8 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import InputField from "@/components/shared/form/InputField";
 import SubmitButton from "@/components/shared/form/SubmitButton";
 import { routes } from "@/lib/constants/routes";
-import useCreateCustomer from "@/lib/hooks/useCreateCustomer";
-import useUpdateCustomer from "@/lib/hooks/useUpdateCustomer";
+import useCreateCustomer from "@/lib/services/customer/customerCreate.controller";
+import useUpdateCustomer from "@/lib/services/customer/customerUpdate.controller";
 import type { Customer, CustomerInput } from "@/lib/types/customer.types";
 import { getCustomerFormDefaultValues, toCustomerInput } from "@/lib/utils/customerForm";
 import {
