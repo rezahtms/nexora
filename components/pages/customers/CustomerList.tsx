@@ -10,7 +10,7 @@ import SearchInput from "@/components/shared/SearchInput";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import useCustomers from "@/lib/hooks/useCustomers";
+import useCustomers from "@/lib/services/customer/customerList.controller";
 import type { Customer } from "@/lib/types/customer.types";
 import type { ColumnDef } from "@/lib/types/table.types";
 

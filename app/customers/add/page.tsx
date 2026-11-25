@@ -11,8 +11,6 @@ import { routes } from "@/lib/constants/routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Add customer",
   description: "Add a new customer to your Nexora CRM workspace.",

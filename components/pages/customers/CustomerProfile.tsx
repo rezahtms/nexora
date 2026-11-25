@@ -12,17 +12,15 @@ import {
 import CustomerDetail from "@/components/pages/customers/CustomerDetail";
 import CustomerDetailActions from "@/components/pages/customers/CustomerDetailActions";
 import CustomerIdentity from "@/components/pages/customers/CustomerIdentity";
-import useBackToCustomersHref from "@/lib/hooks/useBackToCustomersHref";
+import { routes } from "@/lib/constants/routes";
 
 export default function CustomerProfile() {
-  const backHref = useBackToCustomersHref();
-
   return (
     <main id="main-content" className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink render={<Link href={backHref} />}>Customers</BreadcrumbLink>
+            <BreadcrumbLink render={<Link href={routes.customers} />}>Customers</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

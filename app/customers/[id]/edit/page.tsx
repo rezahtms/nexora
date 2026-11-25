@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,44 +9,54 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Spinner } from "@/components/ui/spinner";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
+import { UserRoundX } from "lucide-react";
 import CustomerForm from "@/components/pages/customers/CustomerForm";
 import { routes } from "@/lib/constants/routes";
-import { getServerCustomer } from "@/lib/utils/getServerCustomer";
-import { parseCustomerId } from "@/lib/utils/parseCustomerId";
+import useCustomer from "@/lib/services/customer/customerDetail.controller";
+import useCustomerId from "@/lib/hooks/useCustomerId";
 
-export const dynamic = "force-dynamic";
+export default function EditCustomerPage() {
+  const id = useCustomerId();
+  const customerQuery = useCustomer(id);
+  const customer = customerQuery.data;
 
-export async function generateMetadata({ params }: PageProps<"/customers/[id]/edit">): Promise<Metadata> {
-  const { id } = await params;
-  const customerId = parseCustomerId(id);
-  if (customerId === null) {
-    return { title: "Customer not found", robots: { index: false, follow: false } };
+  if (id === null || customerQuery.isNotFound) {
+    return (
+      <main id="main-content" className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+        <Empty className="mt-8 border border-dashed py-14">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <UserRoundX aria-hidden="true" />
+            </EmptyMedia>
+            <EmptyTitle>Customer not found</EmptyTitle>
+            <EmptyDescription>
+              This customer may have been removed or the address may be incorrect.
+            </EmptyDescription>
+          </EmptyHeader>
+          <Button variant="outline" nativeButton={false} render={<Link href={routes.customers} />}>
+            Back to customers
+          </Button>
+        </Empty>
+      </main>
+    );
   }
 
-  const customer = await getServerCustomer(customerId);
-  if (!customer) {
-    return { title: "Customer not found", robots: { index: false, follow: false } };
-  }
-
-  const fullName = `${customer.firstName} ${customer.lastName}`;
-  return {
-    title: `Edit ${fullName}`,
-    description: `Edit contact, company, and address details for ${fullName}.`,
-    alternates: { canonical: `/customers/${customerId}/edit` },
-    robots: { index: false, follow: false },
-  };
-}
-
-export default async function EditCustomerPage({ params }: PageProps<"/customers/[id]/edit">) {
-  const { id } = await params;
-  const customerId = parseCustomerId(id);
-  if (customerId === null) {
-    notFound();
-  }
-
-  const customer = await getServerCustomer(customerId);
-  if (!customer) {
-    notFound();
+  if (customerQuery.isLoading || !customer) {
+    return (
+      <main id="main-content" className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+        <div
+          className="flex min-h-40 items-center justify-center gap-3 text-sm font-medium text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <Spinner />
+          <span>Loading customer information</span>
+        </div>
+      </main>
+    );
   }
 
   const fullName = `${customer.firstName} ${customer.lastName}`;
@@ -60,7 +70,7 @@ export default async function EditCustomerPage({ params }: PageProps<"/customers
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink render={<Link href={routes.customer(customerId)} />}>{fullName}</BreadcrumbLink>
+            <BreadcrumbLink render={<Link href={routes.customer(customer.id)} />}>{fullName}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

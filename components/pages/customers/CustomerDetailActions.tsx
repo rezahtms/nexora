@@ -1,7 +1,7 @@
 "use client";
 
 import CustomerActions from "@/components/pages/customers/CustomerActions";
-import useCustomer from "@/lib/hooks/useCustomer";
+import useCustomer from "@/lib/services/customer/customerDetail.controller";
 import useCustomerId from "@/lib/hooks/useCustomerId";
 
 export default function CustomerDetailActions() {

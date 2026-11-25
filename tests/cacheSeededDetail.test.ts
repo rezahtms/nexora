@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
-import useCustomer from "@/lib/hooks/useCustomer";
+import useCustomer from "@/lib/services/customer/customerDetail.controller";
 import { customerKeys } from "@/lib/services/customer/customer.keys";
 import type { Customer, CustomerCacheChanges } from "@/lib/types/customer.types";
 

@@ -1,5 +1,11 @@
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { sendRequest } from "@/lib/configs/request";
-import { CUSTOMER_PAGE_SIZE } from "@/lib/constants/config";
+import { CUSTOMER_PAGE_SIZE, QUERY_STALE_TIME } from "@/lib/constants/config";
+import useCustomerCacheChanges from "@/lib/hooks/useCustomerCacheChanges";
+import useCustomerFilters from "@/lib/hooks/useCustomerFilters";
+import { customerKeys } from "@/lib/services/customer/customer.keys";
+import { mergeCustomerPage } from "@/lib/utils/customerCache";
 import type {
   CustomerApiListParams,
   CustomerApiSearchParams,
@@ -50,4 +56,24 @@ export async function getCustomerList(
     skip,
     limit,
   };
+}
+
+export default function useCustomers() {
+  const filters = useCustomerFilters();
+  const cacheChanges = useCustomerCacheChanges();
+
+  const select = useCallback(
+    (page: CustomerPage) => mergeCustomerPage(page, cacheChanges.data, filters.params),
+    [cacheChanges.data, filters.params],
+  );
+
+  const query = useQuery({
+    queryKey: customerKeys.list(filters.params),
+    queryFn: ({ signal }) => getCustomerList(filters.params, signal),
+    staleTime: QUERY_STALE_TIME,
+    placeholderData: keepPreviousData,
+    select,
+  });
+
+  return { ...filters, query };
 }

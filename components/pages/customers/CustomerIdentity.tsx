@@ -1,7 +1,7 @@
 "use client";
 
 import CustomerAvatar from "@/components/pages/customers/CustomerAvatar";
-import useCustomer from "@/lib/hooks/useCustomer";
+import useCustomer from "@/lib/services/customer/customerDetail.controller";
 import useCustomerId from "@/lib/hooks/useCustomerId";
 
 export default function CustomerIdentity() {
