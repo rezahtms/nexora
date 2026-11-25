@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 import Providers from "@/lib/providers/providers";
 import ToastProvider from "@/components/shared/ToastProvider";
+import { geistMono, geistSans } from "./font";
 import "./globals.css";
-
-const geist = localFont({ src: "../public/fonts/geist-latin.woff2", variable: "--font-geist-sans", weight: "100 900", display: "swap" });
-const geistMono = localFont({ src: "../public/fonts/geist-mono-latin.woff2", variable: "--font-geist-mono", weight: "100 900", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nexora.app"),
@@ -19,7 +16,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} style-nova h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} style-nova h-full antialiased`}>
       <body className="min-h-full bg-background font-sans text-foreground">
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <Providers>{children}</Providers>

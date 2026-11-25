@@ -4,7 +4,7 @@ import { useId, type ComponentProps } from "react";
 import { Controller, type Control, type FieldValues, type Path } from "react-hook-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { parseFieldValue } from "@/components/shared/form/parseFieldValue";
+import { parseFieldValue } from "@/lib/utils/parseFieldValue";
 
 type NativeInputProps = Omit<ComponentProps<"input">, "name" | "value" | "defaultValue" | "type" | "onChange">;
 
