@@ -19,7 +19,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} style-nova h-full antialiased`}>
       <body className="min-h-full bg-background font-sans text-foreground">
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <Providers>{children}</Providers>
