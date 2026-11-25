@@ -1,24 +1,50 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
-const buttonVariants = cva("inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-transparent text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/40 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4", {
-  variants: {
-    variant: {
-      default: "bg-primary text-primary-foreground hover:bg-primary/90",
-      outline: "border-border bg-background hover:bg-muted",
-      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-      ghost: "hover:bg-muted",
-      destructive: "bg-destructive text-white hover:bg-destructive/90",
-      link: "text-primary underline-offset-4 hover:underline",
+const buttonVariants = cva(
+  "cn-button group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default: "cn-button-variant-default",
+        outline: "cn-button-variant-outline",
+        secondary: "cn-button-variant-secondary",
+        ghost: "cn-button-variant-ghost",
+        destructive: "cn-button-variant-destructive",
+        link: "cn-button-variant-link",
+      },
+      size: {
+        default: "cn-button-size-default",
+        xs: "cn-button-size-xs",
+        sm: "cn-button-size-sm",
+        lg: "cn-button-size-lg",
+        icon: "cn-button-size-icon",
+        "icon-xs": "cn-button-size-icon-xs",
+        "icon-sm": "cn-button-size-icon-sm",
+        "icon-lg": "cn-button-size-icon-lg",
+      },
     },
-    size: { default: "h-11 px-4", sm: "h-10 px-3", lg: "h-12 px-5", icon: "size-11" },
-  },
-  defaultVariants: { variant: "default", size: "default" },
-});
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
 
-type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
-
-export default function Button({ className, variant, size, ...props }: ButtonProps) {
-  return <ButtonPrimitive className={cn(buttonVariants({ variant, size, className }))} {...props} />;
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <ButtonPrimitive
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
 }
+
+export { Button, buttonVariants }

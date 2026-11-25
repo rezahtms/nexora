@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, UserRoundX } from "lucide-react";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/constants/routes";
 
 export default function CustomerNotFound() {

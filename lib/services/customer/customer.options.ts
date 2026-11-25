@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { QUERY_STALE_TIME } from "@/lib/constants/config";
-import { getCustomerDetail } from "@/lib/services/customer/customer-detail.controller";
-import { getCustomerList } from "@/lib/services/customer/customer-list.controller";
+import { getCustomerDetail } from "@/lib/services/customer/customerDetail.controller";
+import { getCustomerList } from "@/lib/services/customer/customerList.controller";
 import { customerKeys } from "@/lib/services/customer/customer.keys";
 import type { CustomerListParams } from "@/lib/types/customer.types";
 

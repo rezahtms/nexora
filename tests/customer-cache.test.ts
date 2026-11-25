@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { Customer, CustomerListParams, CustomerPage } from "@/lib/types/customer.types";
-import { applyCustomerUpdate, mergeCustomerPage, removeCustomerFromPage } from "@/lib/utils/customer-cache";
-import { parseCustomerId } from "@/lib/utils/parse-customer-id";
-import { parseCustomerListParams } from "@/lib/utils/parse-customer-list-params";
-import { serializeSearchParams } from "@/lib/utils/serialize-search-params";
+import { applyCustomerUpdate, mergeCustomerPage, removeCustomerFromPage } from "@/lib/utils/customerCache";
+import { parseCustomerId } from "@/lib/utils/parseCustomerId";
+import { parseCustomerListParams } from "@/lib/utils/parseCustomerListParams";
+import { serializeSearchParams } from "@/lib/utils/serializeSearchParams";
 
 const original: Customer = {
   id: 1,
