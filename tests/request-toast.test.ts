@@ -31,7 +31,9 @@ describe("toast message mapping", () => {
 
   it("maps default error messages by status code and error code", () => {
     expect(getDefaultErrorMessage(0, "ECONNABORTED")).toBe("Request timed out. Please try again.");
-    expect(getDefaultErrorMessage(0, "ERR_NETWORK")).toBe("Network error. Please check your connection.");
+    expect(getDefaultErrorMessage(0, "ERR_NETWORK")).toBe(
+      "Network error. Please check your connection.",
+    );
     expect(getDefaultErrorMessage(0)).toBe("Network error. Please check your connection.");
     expect(getDefaultErrorMessage(400)).toBe("Invalid request.");
     expect(getDefaultErrorMessage(401)).toBe("Your session has expired.");
@@ -119,19 +121,13 @@ describe("sendRequest interceptor toast behavior", () => {
 
   it("throws ApiError and shows error toast for failed mutations while keeping GET errors silent", async () => {
     axiosInstance.defaults.adapter = async (config: InternalAxiosRequestConfig) => {
-      throw new AxiosError(
-        "Request failed",
-        "ERR_BAD_REQUEST",
+      throw new AxiosError("Request failed", "ERR_BAD_REQUEST", config, null, {
+        data: { message: "User with id '999' not found" },
+        status: 404,
+        statusText: "Not Found",
+        headers: new AxiosHeaders(),
         config,
-        null,
-        {
-          data: { message: "User with id '999' not found" },
-          status: 404,
-          statusText: "Not Found",
-          headers: new AxiosHeaders(),
-          config,
-        },
-      );
+      });
     };
 
     await expect(sendRequest({ method: "get", url: "/users/999" })).rejects.toMatchObject({

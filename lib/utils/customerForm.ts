@@ -1,5 +1,8 @@
 import type { Customer, CustomerInput } from "@/lib/types/customer.types";
-import type { CustomerFormValues, ValidCustomerFormValues } from "@/lib/validations/customer.schema";
+import type {
+  CustomerFormValues,
+  ValidCustomerFormValues,
+} from "@/lib/validations/customer.schema";
 
 export function formatDateForInput(value?: string): string {
   if (!value) {

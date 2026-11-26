@@ -9,7 +9,14 @@ import DataTable from "@/components/shared/DataTable";
 import SearchInput from "@/components/shared/SearchInput";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import useCustomers from "@/lib/services/customer/customerList.controller";
 import type { Customer } from "@/lib/types/customer.types";
 import type { ColumnDef } from "@/lib/types/table.types";
@@ -65,7 +72,8 @@ function getCustomerRowId(customer: Customer): number {
 }
 
 export default function CustomerList() {
-  const { params, searchTerm, setSearchTerm, clearSearch, isDebouncing, isPending, query } = useCustomers();
+  const { params, searchTerm, setSearchTerm, clearSearch, isDebouncing, isPending, query } =
+    useCustomers();
 
   const tableData = useMemo(() => {
     if (!query.data) {
@@ -115,7 +123,9 @@ export default function CustomerList() {
                 <EmptyMedia variant="icon">
                   <Users aria-hidden="true" />
                 </EmptyMedia>
-                <EmptyTitle>{params.q ? `No customers match “${params.q}”` : "No customers yet"}</EmptyTitle>
+                <EmptyTitle>
+                  {params.q ? `No customers match “${params.q}”` : "No customers yet"}
+                </EmptyTitle>
                 <EmptyDescription>
                   {params.q
                     ? "Try another name, or clear your search to see everyone."

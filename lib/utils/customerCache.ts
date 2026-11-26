@@ -1,4 +1,9 @@
-import type { Customer, CustomerCacheChanges, CustomerListParams, CustomerPage } from "@/lib/types/customer.types";
+import type {
+  Customer,
+  CustomerCacheChanges,
+  CustomerListParams,
+  CustomerPage,
+} from "@/lib/types/customer.types";
 
 export function mergeCustomerPage(
   page: CustomerPage,
@@ -12,29 +17,33 @@ export function mergeCustomerPage(
     .map((customer) => changes.updated[customer.id] ?? customer)
     .filter((customer) => matchesCustomerName(customer, query));
   const baseIds = new Set(baseCustomers.map((customer) => customer.id));
-  const created = params.page === 1
-    ? changes.created
-        .filter((customer) => !deletedIds.has(customer.id) && !baseIds.has(customer.id))
-        .map((customer) => changes.updated[customer.id] ?? customer)
-        .filter((customer) => matchesCustomerName(customer, query))
-    : [];
-  const updatedNotOnPage = params.page === 1
-    ? Object.values(changes.updated)
-        .filter(
-          (customer) =>
-            !deletedIds.has(customer.id) &&
-            !baseIds.has(customer.id) &&
-            !created.some((createdItem) => createdItem.id === customer.id),
-        )
-        .filter((customer) => matchesCustomerName(customer, query))
-    : [];
+  const created =
+    params.page === 1
+      ? changes.created
+          .filter((customer) => !deletedIds.has(customer.id) && !baseIds.has(customer.id))
+          .map((customer) => changes.updated[customer.id] ?? customer)
+          .filter((customer) => matchesCustomerName(customer, query))
+      : [];
+  const updatedNotOnPage =
+    params.page === 1
+      ? Object.values(changes.updated)
+          .filter(
+            (customer) =>
+              !deletedIds.has(customer.id) &&
+              !baseIds.has(customer.id) &&
+              !created.some((createdItem) => createdItem.id === customer.id),
+          )
+          .filter((customer) => matchesCustomerName(customer, query))
+      : [];
   const merged = [...baseCustomers, ...created, ...updatedNotOnPage].sort((left, right) =>
     compareNames(left, right, params.order),
   );
   const visible = merged.slice(0, params.limit);
   const createdIds = new Set(changes.created.map((customer) => customer.id));
   const matchingCreatedCount = changes.created.filter(
-    (customer) => !deletedIds.has(customer.id) && matchesCustomerName(changes.updated[customer.id] ?? customer, query),
+    (customer) =>
+      !deletedIds.has(customer.id) &&
+      matchesCustomerName(changes.updated[customer.id] ?? customer, query),
   ).length;
   const deletedCount = changes.deleted.filter((id) => {
     if (createdIds.has(id)) return false;
@@ -42,7 +51,13 @@ export function mergeCustomerPage(
     return customer ? matchesCustomerName(customer, query) : false;
   }).length;
   const total = Math.max(visible.length, page.total + matchingCreatedCount - deletedCount);
-  return { ...page, users: visible, total, skip: (params.page - 1) * params.limit, limit: params.limit };
+  return {
+    ...page,
+    users: visible,
+    total,
+    skip: (params.page - 1) * params.limit,
+    limit: params.limit,
+  };
 }
 
 export function applyCustomerUpdate(page: CustomerPage, customer: Customer): CustomerPage {

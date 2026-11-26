@@ -56,9 +56,7 @@ export function buildQueryString(
   return search.toString();
 }
 
-export function parseSearchParams(
-  searchParams: URLSearchParams,
-): QueryParamsRecord {
+export function parseSearchParams(searchParams: URLSearchParams): QueryParamsRecord {
   const result: QueryParamsRecord = {};
   searchParams.forEach((_, key) => {
     if (Object.prototype.hasOwnProperty.call(result, key)) {

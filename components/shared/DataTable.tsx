@@ -166,13 +166,7 @@ function DataTableSkeletonRows({
   );
 }
 
-function MobileCard<TData>({
-  row,
-  columns,
-}: {
-  row: TData;
-  columns: readonly ColumnDef<TData>[];
-}) {
+function MobileCard<TData>({ row, columns }: { row: TData; columns: readonly ColumnDef<TData>[] }) {
   const visibleColumns = columns.filter((column) => !column.hideOnMobile);
   const leading = visibleColumns.filter((column) => column.mobileRole === "leading");
   const title = visibleColumns.filter((column) => column.mobileRole === "title");
@@ -203,10 +197,17 @@ function MobileCard<TData>({
           </div>
         ) : null}
         {details.length > 0 ? (
-          <dl className={cn("space-y-2 text-sm", leading.length > 0 || title.length > 0 ? "mt-4" : "")}
+          <dl
+            className={cn(
+              "space-y-2 text-sm",
+              leading.length > 0 || title.length > 0 ? "mt-4" : "",
+            )}
           >
             {details.map((column) => (
-              <div key={column.id} className="flex min-w-0 items-center gap-2 text-muted-foreground">
+              <div
+                key={column.id}
+                className="flex min-w-0 items-center gap-2 text-muted-foreground"
+              >
                 <dt className="sr-only">{column.header}</dt>
                 <dd className="min-w-0 flex-1 truncate">{column.cell(row)}</dd>
               </div>
@@ -244,7 +245,8 @@ export default function DataTable<TData>({
     return Number.isInteger(raw) && raw > 0 ? raw : 1;
   }, [query.page]);
   const sortBy = typeof query.sortBy === "string" ? query.sortBy : sortColumnId;
-  const order: SortOrder = query.order === "desc" ? "desc" : query.order === "asc" ? "asc" : defaultOrder;
+  const order: SortOrder =
+    query.order === "desc" ? "desc" : query.order === "asc" ? "asc" : defaultOrder;
 
   const total = data?.total ?? 0;
   const items = data?.items ?? [];
@@ -252,7 +254,10 @@ export default function DataTable<TData>({
   const safePage = Math.min(currentPage, pageCount);
   const rangeStart = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
   const rangeEnd = total === 0 ? 0 : Math.min(safePage * pageSize, total);
-  const paginationItems = useMemo(() => getPaginationItems(safePage, pageCount), [pageCount, safePage]);
+  const paginationItems = useMemo(
+    () => getPaginationItems(safePage, pageCount),
+    [pageCount, safePage],
+  );
 
   const setPage = useCallback(
     (page: number, scroll = true) => {
@@ -332,7 +337,10 @@ export default function DataTable<TData>({
                     <th
                       key={column.id}
                       scope="row"
-                      className={cn("px-2 py-3 text-left align-middle font-medium", column.className)}
+                      className={cn(
+                        "px-2 py-3 text-left align-middle font-medium",
+                        column.className,
+                      )}
                     >
                       {column.cell(row)}
                     </th>
@@ -367,7 +375,10 @@ export default function DataTable<TData>({
                   }
                 }}
                 aria-disabled={safePage <= 1}
-                className={cn("min-h-11 min-w-11", safePage <= 1 ? "pointer-events-none opacity-50" : undefined)}
+                className={cn(
+                  "min-h-11 min-w-11",
+                  safePage <= 1 ? "pointer-events-none opacity-50" : undefined,
+                )}
               />
             </PaginationItem>
             <PaginationItem className="sm:hidden">
@@ -405,7 +416,10 @@ export default function DataTable<TData>({
                   }
                 }}
                 aria-disabled={safePage >= pageCount}
-                className={cn("min-h-11 min-w-11", safePage >= pageCount ? "pointer-events-none opacity-50" : undefined)}
+                className={cn(
+                  "min-h-11 min-w-11",
+                  safePage >= pageCount ? "pointer-events-none opacity-50" : undefined,
+                )}
               />
             </PaginationItem>
           </PaginationContent>

@@ -80,9 +80,7 @@ export default function useUpdateCustomer() {
 
       const existing =
         queryClient.getQueryData<Customer>(customerKeys.detail(id)) ??
-        snapshot.lists
-          .flatMap(([, page]) => page?.users ?? [])
-          .find((item) => item.id === id) ??
+        snapshot.lists.flatMap(([, page]) => page?.users ?? []).find((item) => item.id === id) ??
         snapshot.changes.created.find((item) => item.id === id);
 
       if (!existing) {

@@ -18,7 +18,11 @@ describe("customerSchema", () => {
   });
 
   it("reports useful errors for invalid required fields", () => {
-    const result = customerSchema.safeParse({ ...validCustomer, email: "not-an-email", firstName: " " });
+    const result = customerSchema.safeParse({
+      ...validCustomer,
+      email: "not-an-email",
+      firstName: " ",
+    });
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues.map((issue) => issue.path[0])).toContain("email");

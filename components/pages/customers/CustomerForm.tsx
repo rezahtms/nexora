@@ -78,35 +78,155 @@ export default function CustomerForm({ customer }: CustomerFormProps) {
             <FieldSet>
               <FieldLegend className="sr-only">Customer information</FieldLegend>
               <div className="grid gap-4 sm:grid-cols-2">
-                <InputField control={form.control} name="firstName" label="First name" required valueType="string" autoComplete="given-name" />
-                <InputField control={form.control} name="lastName" label="Last name" required valueType="string" autoComplete="family-name" />
-                <InputField control={form.control} name="email" label="Email address" required valueType="string" type="email" autoComplete="email" />
-                <InputField control={form.control} name="phone" label="Phone number" required valueType="string" type="tel" autoComplete="tel" />
-                <InputField control={form.control} name="company.name" label="Company name" required valueType="string" autoComplete="organization" />
-                <InputField control={form.control} name="company.title" label="Job title" valueType="string" autoComplete="organization-title" />
-                <InputField control={form.control} name="age" label="Age" required valueType="number" type="number" inputMode="numeric" min={0} max={120} />
-                <InputField control={form.control} name="gender" label="Gender" valueType="string" />
-                <InputField control={form.control} name="maidenName" label="Maiden name" valueType="string" />
-                <InputField control={form.control} name="birthDate" label="Date of birth" valueType="string" type="date" />
-                <InputField control={form.control} name="company.department" label="Department" valueType="string" />
-                <InputField control={form.control} name="image" label="Profile image URL" valueType="string" type="url" />
+                <InputField
+                  control={form.control}
+                  name="firstName"
+                  label="First name"
+                  required
+                  valueType="string"
+                  autoComplete="given-name"
+                />
+                <InputField
+                  control={form.control}
+                  name="lastName"
+                  label="Last name"
+                  required
+                  valueType="string"
+                  autoComplete="family-name"
+                />
+                <InputField
+                  control={form.control}
+                  name="email"
+                  label="Email address"
+                  required
+                  valueType="string"
+                  type="email"
+                  autoComplete="email"
+                />
+                <InputField
+                  control={form.control}
+                  name="phone"
+                  label="Phone number"
+                  required
+                  valueType="string"
+                  type="tel"
+                  autoComplete="tel"
+                />
+                <InputField
+                  control={form.control}
+                  name="company.name"
+                  label="Company name"
+                  required
+                  valueType="string"
+                  autoComplete="organization"
+                />
+                <InputField
+                  control={form.control}
+                  name="company.title"
+                  label="Job title"
+                  valueType="string"
+                  autoComplete="organization-title"
+                />
+                <InputField
+                  control={form.control}
+                  name="age"
+                  label="Age"
+                  required
+                  valueType="number"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={120}
+                />
+                <InputField
+                  control={form.control}
+                  name="gender"
+                  label="Gender"
+                  valueType="string"
+                />
+                <InputField
+                  control={form.control}
+                  name="maidenName"
+                  label="Maiden name"
+                  valueType="string"
+                />
+                <InputField
+                  control={form.control}
+                  name="birthDate"
+                  label="Date of birth"
+                  valueType="string"
+                  type="date"
+                />
+                <InputField
+                  control={form.control}
+                  name="company.department"
+                  label="Department"
+                  valueType="string"
+                />
+                <InputField
+                  control={form.control}
+                  name="image"
+                  label="Profile image URL"
+                  valueType="string"
+                  type="url"
+                />
               </div>
             </FieldSet>
 
             <FieldSet>
               <FieldLegend>Address</FieldLegend>
               <div className="grid gap-4 sm:grid-cols-2">
-                <InputField control={form.control} name="address.address" label="Street address" valueType="string" autoComplete="street-address" />
-                <InputField control={form.control} name="address.city" label="City" valueType="string" autoComplete="address-level2" />
-                <InputField control={form.control} name="address.state" label="State or region" valueType="string" autoComplete="address-level1" />
-                <InputField control={form.control} name="address.stateCode" label="State code" valueType="string" />
-                <InputField control={form.control} name="address.postalCode" label="Postal code" valueType="string" autoComplete="postal-code" />
-                <InputField control={form.control} name="address.country" label="Country" valueType="string" autoComplete="country-name" />
+                <InputField
+                  control={form.control}
+                  name="address.address"
+                  label="Street address"
+                  valueType="string"
+                  autoComplete="street-address"
+                />
+                <InputField
+                  control={form.control}
+                  name="address.city"
+                  label="City"
+                  valueType="string"
+                  autoComplete="address-level2"
+                />
+                <InputField
+                  control={form.control}
+                  name="address.state"
+                  label="State or region"
+                  valueType="string"
+                  autoComplete="address-level1"
+                />
+                <InputField
+                  control={form.control}
+                  name="address.stateCode"
+                  label="State code"
+                  valueType="string"
+                />
+                <InputField
+                  control={form.control}
+                  name="address.postalCode"
+                  label="Postal code"
+                  valueType="string"
+                  autoComplete="postal-code"
+                />
+                <InputField
+                  control={form.control}
+                  name="address.country"
+                  label="Country"
+                  valueType="string"
+                  autoComplete="country-name"
+                />
               </div>
             </FieldSet>
 
             <div className="flex justify-end gap-3 border-t pt-4">
-              <Button type="button" variant="outline" onClick={handleCancel} disabled={isSubmitting}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                disabled={isSubmitting}
+              >
                 Cancel
               </Button>
               <SubmitButton isDirty={form.formState.isDirty} isSubmitting={isSubmitting}>

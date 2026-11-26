@@ -6,7 +6,14 @@ import { AlertCircle, Building2, Mail, MapPin, Phone, RefreshCw, UserRoundX } fr
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { routes } from "@/lib/constants/routes";
 import useCustomer from "@/lib/services/customer/customerDetail.controller";
@@ -19,7 +26,15 @@ function maskIdentifier(value?: string): string | undefined {
   return `•••• ${value.slice(-4)}`;
 }
 
-function DetailItem({ label, value, icon }: { label: string; value?: string | number; icon?: ReactNode }) {
+function DetailItem({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value?: string | number;
+  icon?: ReactNode;
+}) {
   return (
     <div className="min-w-0">
       <dt className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -59,7 +74,11 @@ export default function CustomerDetail() {
 
   if (customerQuery.isLoading) {
     return (
-      <div className="mt-10 flex min-h-32 items-center justify-center gap-3 text-sm font-medium text-muted-foreground" role="status" aria-live="polite">
+      <div
+        className="mt-10 flex min-h-32 items-center justify-center gap-3 text-sm font-medium text-muted-foreground"
+        role="status"
+        aria-live="polite"
+      >
         <Spinner />
         <span>Loading customer information</span>
       </div>
@@ -100,10 +119,20 @@ export default function CustomerDetail() {
             <DetailItem label="Eye color" value={customer.eyeColor} />
             <DetailItem
               label="Hair"
-              value={customer.hair ? `${customer.hair.color ?? ""} ${customer.hair.type ?? ""}`.trim() : undefined}
+              value={
+                customer.hair
+                  ? `${customer.hair.color ?? ""} ${customer.hair.type ?? ""}`.trim()
+                  : undefined
+              }
             />
-            <DetailItem label="Height" value={customer.height ? `${customer.height} cm` : undefined} />
-            <DetailItem label="Weight" value={customer.weight ? `${customer.weight} kg` : undefined} />
+            <DetailItem
+              label="Height"
+              value={customer.height ? `${customer.height} cm` : undefined}
+            />
+            <DetailItem
+              label="Weight"
+              value={customer.weight ? `${customer.weight} kg` : undefined}
+            />
           </dl>
         </CardContent>
       </Card>
@@ -130,7 +159,11 @@ export default function CustomerDetail() {
         </CardHeader>
         <CardContent>
           <dl className="detail-grid">
-            <DetailItem label="Street" value={customer.address.address} icon={<MapPin aria-hidden="true" />} />
+            <DetailItem
+              label="Street"
+              value={customer.address.address}
+              icon={<MapPin aria-hidden="true" />}
+            />
             <DetailItem label="City" value={customer.address.city} />
             <DetailItem label="State" value={customer.address.state} />
             <DetailItem label="State code" value={customer.address.stateCode} />
@@ -154,7 +187,11 @@ export default function CustomerDetail() {
         </CardHeader>
         <CardContent>
           <dl className="detail-grid">
-            <DetailItem label="Company" value={customer.company.name} icon={<Building2 aria-hidden="true" />} />
+            <DetailItem
+              label="Company"
+              value={customer.company.name}
+              icon={<Building2 aria-hidden="true" />}
+            />
             <DetailItem label="Job title" value={customer.company.title} />
             <DetailItem label="Department" value={customer.company.department} />
             <DetailItem label="Office address" value={customer.company.address?.address} />
@@ -166,7 +203,10 @@ export default function CustomerDetail() {
         </CardContent>
       </Card>
 
-      <Card className="border-border/80 shadow-sm md:col-span-2" aria-labelledby="additional-heading">
+      <Card
+        className="border-border/80 shadow-sm md:col-span-2"
+        aria-labelledby="additional-heading"
+      >
         <CardHeader>
           <CardTitle id="additional-heading">Additional information</CardTitle>
         </CardHeader>
@@ -179,7 +219,10 @@ export default function CustomerDetail() {
             <DetailItem label="Bank card type" value={customer.bank?.cardType} />
             <DetailItem label="Card expiry" value={customer.bank?.cardExpire} />
             <DetailItem label="Bank currency" value={customer.bank?.currency} />
-            <DetailItem label="Card number (masked)" value={maskIdentifier(customer.bank?.cardNumber)} />
+            <DetailItem
+              label="Card number (masked)"
+              value={maskIdentifier(customer.bank?.cardNumber)}
+            />
             <DetailItem label="IBAN" value={customer.bank?.iban} />
             <DetailItem label="Cryptocurrency" value={customer.crypto?.coin} />
             <DetailItem label="Crypto wallet" value={customer.crypto?.wallet} />

@@ -1,12 +1,7 @@
 export type HttpMethod = "get" | "post" | "put" | "patch" | "delete";
 
 export type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonValue[]
-  | { [key: string]: JsonValue };
+  string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
 export type RequestOptions<TBody = undefined, TParams = undefined> = {
   method: HttpMethod;

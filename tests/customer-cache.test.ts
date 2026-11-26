@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { Customer, CustomerListParams, CustomerPage } from "@/lib/types/customer.types";
-import { applyCustomerUpdate, mergeCustomerPage, removeCustomerFromPage } from "@/lib/utils/customerCache";
+import {
+  applyCustomerUpdate,
+  mergeCustomerPage,
+  removeCustomerFromPage,
+} from "@/lib/utils/customerCache";
 import { parseCustomerId } from "@/lib/utils/parseCustomerId";
 import { parseCustomerListParams } from "@/lib/utils/parseCustomerListParams";
 import { serializeSearchParams } from "@/lib/utils/serializeSearchParams";
@@ -86,6 +90,8 @@ describe("route parameter helpers", () => {
 
   it("serializes search param records and URLSearchParams", () => {
     expect(serializeSearchParams({ q: "ava", page: "2" })).toBe("q=ava&page=2");
-    expect(serializeSearchParams(new URLSearchParams("order=desc&page=3"))).toBe("order=desc&page=3");
+    expect(serializeSearchParams(new URLSearchParams("order=desc&page=3"))).toBe(
+      "order=desc&page=3",
+    );
   });
 });

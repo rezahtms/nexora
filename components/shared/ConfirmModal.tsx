@@ -52,7 +52,12 @@ export default function ConfirmModal({
       onOpenChange={handleOpenChange}
       footer={
         <>
-          <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isPending}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handleOpenChange(false)}
+            disabled={isPending}
+          >
             Cancel
           </Button>
           <Button

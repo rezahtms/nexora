@@ -1,7 +1,4 @@
-export function parseFieldValue(
-  value: string,
-  valueType: "string" | "number",
-): string | number {
+export function parseFieldValue(value: string, valueType: "string" | "number"): string | number {
   if (valueType === "number") {
     if (value === "") {
       return 0;

@@ -10,7 +10,13 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Spinner } from "@/components/ui/spinner";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { UserRoundX } from "lucide-react";
 import CustomerForm from "@/components/pages/customers/CustomerForm";
@@ -70,7 +76,9 @@ export default function EditCustomerPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink render={<Link href={routes.customer(customer.id)} />}>{fullName}</BreadcrumbLink>
+            <BreadcrumbLink render={<Link href={routes.customer(customer.id)} />}>
+              {fullName}
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

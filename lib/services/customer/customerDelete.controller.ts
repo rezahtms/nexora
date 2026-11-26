@@ -3,7 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendRequest } from "@/lib/configs/request";
 import { EMPTY_CUSTOMER_CACHE_CHANGES } from "@/lib/constants/config";
 import { customerKeys } from "@/lib/services/customer/customer.keys";
-import type { Customer, CustomerCacheChanges, CustomerDeleteResponse, CustomerPage } from "@/lib/types/customer.types";
+import type {
+  Customer,
+  CustomerCacheChanges,
+  CustomerDeleteResponse,
+  CustomerPage,
+} from "@/lib/types/customer.types";
 import { removeCustomerFromPage } from "@/lib/utils/customerCache";
 
 export async function deleteCustomer(id: number): Promise<CustomerDeleteResponse> {

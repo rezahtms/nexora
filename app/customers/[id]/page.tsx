@@ -8,7 +8,9 @@ import { parseCustomerId } from "@/lib/utils/parseCustomerId";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: PageProps<"/customers/[id]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/customers/[id]">): Promise<Metadata> {
   const { id } = await params;
   const customerId = parseCustomerId(id);
   if (customerId === null) {

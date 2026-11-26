@@ -6,7 +6,10 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { parseFieldValue } from "@/lib/utils/parseFieldValue";
 
-type NativeInputProps = Omit<ComponentProps<"input">, "name" | "value" | "defaultValue" | "type" | "onChange">;
+type NativeInputProps = Omit<
+  ComponentProps<"input">,
+  "name" | "value" | "defaultValue" | "type" | "onChange"
+>;
 
 type InputFieldProps<T extends FieldValues> = NativeInputProps & {
   name: Path<T>;
@@ -49,7 +52,11 @@ export default function InputField<T extends FieldValues>({
               name={field.name}
               ref={field.ref}
               type={type}
-              value={typeof field.value === "string" || typeof field.value === "number" ? field.value : ""}
+              value={
+                typeof field.value === "string" || typeof field.value === "number"
+                  ? field.value
+                  : ""
+              }
               onBlur={field.onBlur}
               onChange={(event) => {
                 field.onChange(parseFieldValue(event.target.value, valueType));
@@ -58,7 +65,10 @@ export default function InputField<T extends FieldValues>({
               aria-describedby={errorMessage ? errorId : undefined}
               aria-required={required || undefined}
             />
-            <FieldError id={errorId} errors={errorMessage ? [{ message: errorMessage }] : undefined} />
+            <FieldError
+              id={errorId}
+              errors={errorMessage ? [{ message: errorMessage }] : undefined}
+            />
           </Field>
         );
       }}

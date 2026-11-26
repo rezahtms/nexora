@@ -19,11 +19,9 @@ const methodExecutors: Record<HttpMethod, MethodExecutor> = {
     axiosInstance.delete(url, body !== undefined ? { ...config, data: body } : config),
 };
 
-export async function sendRequest<
-  TResponse,
-  TBody = undefined,
-  TParams = undefined,
->(options: RequestOptions<TBody, TParams>): Promise<TResponse> {
+export async function sendRequest<TResponse, TBody = undefined, TParams = undefined>(
+  options: RequestOptions<TBody, TParams>,
+): Promise<TResponse> {
   const isMutation = options.method !== "get";
   const config: AxiosRequestConfig<TBody, TParams> = {
     params: options.params,
