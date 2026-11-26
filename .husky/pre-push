@@ -1,0 +1,4 @@
+corepack pnpm format
+git add -u
+corepack pnpm build
+corepack pnpm typecheck
